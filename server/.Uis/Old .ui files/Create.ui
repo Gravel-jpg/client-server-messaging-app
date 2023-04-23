@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Window_Create</class>
+ <widget class="QDialog" name="Window_Create">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Create Account</string>
+  </property>
+  <widget class="QLabel" name="New_Username_Label">
+   <property name="geometry">
+    <rect>
+     <x>94</x>
+     <y>90</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>username:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="New_Password_field">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>116</y>
+     <width>133</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="New_Password_label">
+   <property name="geometry">
+    <rect>
+     <x>93</x>
+     <y>116</y>
+     <width>50</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>password:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="New_Username_Field">
+   <property name="geometry">
+    <rect>
+     <x>151</x>
+     <y>90</y>
+     <width>133</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Create_Accoun_Button">
+   <property name="geometry">
+    <rect>
+     <x>151</x>
+     <y>171</y>
+     <width>83</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Create Account</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

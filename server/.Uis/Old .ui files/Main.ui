@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Window_Main</class>
+ <widget class="QDialog" name="Window_Main">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Send Message</string>
+  </property>
+  <widget class="QPushButton" name="New_Keys_Button">
+   <property name="geometry">
+    <rect>
+     <x>-1</x>
+     <y>-1</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>refresh keys</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>32</x>
+     <y>41</y>
+     <width>310</width>
+     <height>249</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="Window_Main_Layout">
+    <item row="0" column="1">
+     <widget class="QLabel" name="Recipient_Username_Label">
+      <property name="text">
+       <string>user:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLineEdit" name="Recipient_Username_Field"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="Message_Label">
+      <property name="text">
+       <string>message:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QPlainTextEdit" name="Message_Field"/>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="Send_Button">
+      <property name="text">
+       <string>Send</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
