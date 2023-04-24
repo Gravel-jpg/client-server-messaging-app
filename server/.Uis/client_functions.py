@@ -87,3 +87,14 @@ def split_string(ciphertext):
 def send_string_pieces(strings,c,n,e):
     for i in strings:
         send_string(i,c,n,e)
+
+def process_string_pieces(args,s):
+    mended_message = args[1]
+    while True:
+        x = process_string(client.recv(1024).decode())
+        if x[-2:] != ';;':
+            mended_message += x
+            break
+        else:
+            mended_message += x
+    return mended_message

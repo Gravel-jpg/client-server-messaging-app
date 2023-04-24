@@ -50,11 +50,9 @@ def process_string_pieces(args,client):
     mended_message = args[1]
     while True:
         x = process_string(client.recv(1024).decode())
-        mended_message += x
-        if mended_message[-2:] != ';;':
+        if x[-2:] != ';;':
+            mended_message += x
             break
-    # BAD CODE BUFIX ME
-    # for i in mended_message:
-        # if i[-2:] == ';;':
-            # IF ENDS IN ';;' CHOP OFF ;;
+        else:
+            mended_message += x
     return mended_message

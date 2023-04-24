@@ -10,7 +10,6 @@ class Ui_Window_Main(QtWidgets.QWidget):
     def Upload_Keys(self):
         new_n, new_d, new_e = generate_keys()
         send_string_pieces(split_string(f'update_keys;{new_n},{new_e}'),s,n,e)
-        # send_string(f'update_keys;{new_n},{new_e}',s,n,e)
         x = process_string(s.recv(1024).decode())
         if eval(x.split(';')[1]):
             update_json_keys(new_n,new_d)
