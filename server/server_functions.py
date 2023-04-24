@@ -56,3 +56,19 @@ def process_string_pieces(args,client):
         else:
             mended_message += x
     return mended_message
+
+def split_string(string):
+    length = len(string)
+    strings = []
+    while string != '':
+        x = string[:100]
+        strings.append(x +';;')
+        string = string[100:]
+    strings[-1] = strings[-1][:-2]
+    return strings
+
+
+# Make this func work in the context of send_string in this file
+# def send_string_pieces(strings,client,n,e):
+#     for i in strings:
+#         send_string(i,client,n,e)

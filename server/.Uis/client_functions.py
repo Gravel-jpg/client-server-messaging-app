@@ -41,7 +41,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 filename = os.path.join(here, 'Cjson.json')
 
 #encrypts outgoing messages using servers provided public key
-def send_string(string,c,n ,e):
+def send_string(string,s,n ,e):
     with open(filename,'r') as f:
         data = json.load(f)
     Msg =  ''
@@ -52,7 +52,7 @@ def send_string(string,c,n ,e):
     print(f'shift:{Msg}')
     text = crypt(int(Msg),int(e),int(n))
     print(f'ciphertext:{text}')
-    c.send(str(text).encode())
+    s.send(str(text).encode())
 
 #decrypts incoming messages locally using own private key
 def process_string(string):
@@ -73,20 +73,20 @@ def update_json_keys(n,d):
     data['keys']['d'] = d
     with open(filename,'w') as f:
         json.dump(data,f)
-
-def split_string(ciphertext):
-    length = len(ciphertext)
+        
+def split_string(string):
+    length = len(string)
     strings = []
-    while ciphertext != '':
-        x = ciphertext[:100]
+    while string != '':
+        x = string[:100]
         strings.append(x +';;')
-        ciphertext = ciphertext[100:]
+        string = string[100:]
     strings[-1] = strings[-1][:-2]
     return strings
 
-def send_string_pieces(strings,c,n,e):
+def send_string_pieces(strings,s,n,e):
     for i in strings:
-        send_string(i,c,n,e)
+        send_string(i,s,n,e)
 
 def process_string_pieces(args,s):
     mended_message = args[1]
