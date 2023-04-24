@@ -91,7 +91,7 @@ def send_string_pieces(strings,c,n,e):
 def process_string_pieces(args,s):
     mended_message = args[1]
     while True:
-        x = process_string(client.recv(1024).decode())
+        x = process_string(s.recv(1024).decode())
         if x[-2:] != ';;':
             mended_message += x
             break
