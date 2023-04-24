@@ -26,15 +26,19 @@ def process_string(string):
     return translated
 
 def send_string(string,client_uid,cursor,c):
+    # find users keys
     selected = cursor.execute(f"SELECT keys FROM main WHERE uid = '{client_uid}'").fetchall()
     n,e = selected[0][0].split(',')[0],selected[0][0].split(',')[1]
+    # load shift cipher
     with open(filename,'r') as f:
         data = json.load(f)
     Msg =  ''
+    # Shift
     for i in string:
         i = str(i)
         x = str(data['str_to_int'][i])
         Msg += x
+    # encrypt
     text = crypt(int(Msg),int(e),int(n))
     c.send(str(text).encode())
 
@@ -68,7 +72,7 @@ def split_string(string):
     return strings
 
 
-# Make this func work in the context of send_string in this file
-# def send_string_pieces(strings,client,n,e):
-#     for i in strings:
-#         send_string(i,client,n,e)
+def send_string_pieces(strings,client_uid,cursor,c):
+    for i in strings:
+        send_string(i,client_uid,cursor,c)
+# an example application would look like send_string_pieces(split_string(f'whatever function needs keys{n},{e}')client_uid,cursor,client)
