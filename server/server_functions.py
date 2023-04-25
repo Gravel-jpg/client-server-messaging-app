@@ -53,13 +53,15 @@ def update_json_keys(n,d):
 def process_string_pieces(args,client):
     mended_message = args[0]
     while True:
-        x = process_string(client.recv(1024).decode())
-        if x[-2:] != ';;':
-            mended_message += x
+        i = process_string(client.recv(1024).decode())
+        if i[-2:] != ';;':
+            mended_message += i
             break
         else:
-            mended_message += x[:-2]
+            mended_message += i[:-2]
     return mended_message
+
+
 
 def split_string(string):
     length = len(string)
@@ -70,6 +72,8 @@ def split_string(string):
         string = string[100:]
     strings[-1] = strings[-1][:-2]
     return strings
+
+
 
 
 def send_string_pieces(strings,client_uid,cursor,c):

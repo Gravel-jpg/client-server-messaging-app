@@ -27,7 +27,7 @@ def process_string(string):
     return translated
 # Try to get this func working in the context of this file. just aiming to text encryption/deceyption without any socket issues
 
-
+# Version for testing
 def process_string_pieces(messages):
     mended_message = ''
     for i in messages:
@@ -37,6 +37,17 @@ def process_string_pieces(messages):
             break
         else:
             # add the string but remove the last two digits (';;')
+            mended_message += i[:-2]
+    return mended_message
+# Version for live recieving
+def process_string_pieces(args,client):
+    mended_message = args[0]
+    while True:
+        i = process_string(client.recv(1024).decode())
+        if i[-2:] != ';;':
+            mended_message += i
+            break
+        else:
             mended_message += i[:-2]
     return mended_message
 
