@@ -51,14 +51,14 @@ def update_json_keys(n,d):
         json.dump(data,f)
 
 def process_string_pieces(args,client):
-    mended_message = args[1]
+    mended_message = args[0]
     while True:
         x = process_string(client.recv(1024).decode())
         if x[-2:] != ';;':
             mended_message += x
             break
         else:
-            mended_message += x
+            mended_message += x[:-2]
     return mended_message
 
 def split_string(string):

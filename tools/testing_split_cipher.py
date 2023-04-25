@@ -24,13 +24,13 @@ def process_string(string):
     translated = ''
     for i in text:
         translated += data['int_to_str'][i]
-        print(f'Returning i:{i}')
     return translated
 # Try to get this func working in the context of this file. just aiming to text encryption/deceyption without any socket issues
+
+
 def process_string_pieces(messages):
     mended_message = ''
     for i in messages:
-        print(f'Processing i :{i}')
         i = process_string(i)
         if i[-2:] != ';;':
             mended_message += i
@@ -61,14 +61,6 @@ def send_string(string):
     text = crypt(int(Msg),65537,int(data['keys']['n']))
     return str(text)
 
-# Take big message
-# split into little
-# encrypt little
-# send little
-# process little
-# piece together little
-# do big message
-# Grofit!
 
 
 

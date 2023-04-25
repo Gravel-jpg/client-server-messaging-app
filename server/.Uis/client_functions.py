@@ -49,9 +49,7 @@ def send_string(string,s,n ,e):
         i = str(i)
         x = str(data['str_to_int'][i])
         Msg += x
-    print(f'shift:{Msg}')
     text = crypt(int(Msg),int(e),int(n))
-    print(f'ciphertext:{text}')
     s.send(str(text).encode())
 
 #decrypts incoming messages locally using own private key
@@ -96,5 +94,5 @@ def process_string_pieces(args,s):
             mended_message += x
             break
         else:
-            mended_message += x
+            mended_message += x[:-2]
     return mended_message

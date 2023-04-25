@@ -29,8 +29,8 @@ def client_connection(client,address):
             print(f'connection with {address} Terminated')
             break
         Server_recv = process_string(Server_recv)
-        command = Server_recv.split(';')[0]
-        args = Server_recv.split(';')[1]
+        command = Server_recv.split(';',1)[0]
+        args = Server_recv.split(';',1)[1]
         args = args.split(',')
         
         if command == 'login_attempt':
