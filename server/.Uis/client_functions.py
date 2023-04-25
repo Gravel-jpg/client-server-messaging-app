@@ -50,6 +50,7 @@ def send_string(string,s,n ,e):
         x = str(data['str_to_int'][i])
         Msg += x
     text = crypt(int(Msg),int(e),int(n))
+    print(f'sent:{text}')
     s.send(str(text).encode())
 
 #decrypts incoming messages locally using own private key
