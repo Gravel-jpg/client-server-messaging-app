@@ -151,7 +151,7 @@ class Ui_Window_Create(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.181'
+    host = '192.168.0.178'
     port = 9100
     s = socket.socket()
     try:

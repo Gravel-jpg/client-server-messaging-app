@@ -15,11 +15,12 @@ filename = os.path.join(here, 'Sjson.json')
 
 
 def process_string(string):
-    print(f'untranslated string:{string}')
+    print(f'precrypted:{string}')
     with open(filename,'r') as f:
         data = json.load(f)
     string = int(string)
     text = str(crypt(string,data['keys']['d'],data['keys']['n']))
+    print(f'crypted:{text}')
     text = [text[i:i+2] for i in range(0, len(text), 2)]
     translated = ''
     for i in text:
@@ -52,7 +53,7 @@ def update_json_keys(n,d):
         json.dump(data,f)
 
 def process_string_pieces(args,client):
-    mended_message = args[0]
+    mended_message = args[0][:-2]
     while True:
         i = process_string(client.recv(1024).decode())
         print(f'translated string:{i}')
