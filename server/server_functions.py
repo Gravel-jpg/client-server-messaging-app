@@ -15,6 +15,7 @@ filename = os.path.join(here, 'Sjson.json')
 
 
 def process_string(string):
+    print(f'untranslated string:{string}')
     with open(filename,'r') as f:
         data = json.load(f)
     string = int(string)
@@ -54,6 +55,7 @@ def process_string_pieces(args,client):
     mended_message = args[0]
     while True:
         i = process_string(client.recv(1024).decode())
+        print(f'translated string:{i}')
         if i[-2:] != ';;':
             mended_message += i
             break

@@ -49,6 +49,7 @@ def send_string(string,s,n ,e):
         i = str(i)
         x = str(data['str_to_int'][i])
         Msg += x
+    print(f'string:{string}')
     text = crypt(int(Msg),int(e),int(n))
     print(f'sent:{text}')
     s.send(str(text).encode())
@@ -92,6 +93,9 @@ def split_string(string):
 def send_string_pieces(strings,s,n,e):
     for i in strings:
         send_string(i,s,n,e)
+
+
+
 
 def process_string_pieces(args,s):
     mended_message = args[1]
