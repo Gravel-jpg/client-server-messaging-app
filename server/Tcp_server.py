@@ -24,7 +24,7 @@ def client_connection(client,address):
     client.send(f"{x[0][3]}".encode())
     while True:
         print(f'The client_id is {client_id}')
-        Server_recv = client.recv(1024).decode()
+        Server_recv = client.recv(4096).decode()
         if not Server_recv:
             print(f'connection with {address} Terminated')
             break

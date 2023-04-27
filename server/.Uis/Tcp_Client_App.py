@@ -10,7 +10,7 @@ class Ui_Window_Main(QtWidgets.QWidget):
     def Upload_Keys(self):
         new_n, new_d, new_e = generate_keys()
         send_string_pieces(split_string(f'update_keys;{new_n},{new_e}'),s,n,e)
-        x = process_string(s.recv(1024).decode())
+        x = process_string(s.recv(4096).decode())
         if eval(x.split(';')[1]):
             update_json_keys(new_n,new_d)
         else:
@@ -63,7 +63,7 @@ class Ui_Window_Login(QtWidgets.QWidget):
     def Login_Function(self):
         #Will attempt to login by sending a message and listening for response in True/False form
         send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e)
-        x = s.recv(1024).decode()
+        x = s.recv(4096).decode()
         if x == 'login_attempt;False':
             print('Login False')
         else:
@@ -112,7 +112,7 @@ class Ui_Window_Create(QtWidgets.QWidget):
         widget.setCurrentWidget(page1)
     def Upload_Account(self):
         s.send(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{n},{e}'.encode())
-        if eval(s.recv(1024).decode().split(';')[1]):
+        if eval(s.recv(4096).decode().split(';')[1]):
             print('Account logged in')
             self.Main_Window_Function()
         else:
@@ -151,13 +151,13 @@ class Ui_Window_Create(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.178'
+    host = '192.168.0.179'
     port = 9100
     s = socket.socket()
     try:
         s.connect((host,port))
         print('connected')
-        n = s.recv(1024).decode()
+        n = s.recv(4096).decode()
         e,n = n.split(',')[1],n.split(',')[0]
         print(f'n:{n}\ne:{e}')
     except:

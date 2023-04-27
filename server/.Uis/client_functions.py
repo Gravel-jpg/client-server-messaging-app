@@ -52,6 +52,7 @@ def send_string(string,s,n ,e):
     print(f'string:{string}')
     text = crypt(int(Msg),int(e),int(n))
     print(f'sent:{text}')
+    print(f'length:{len(str(text))}')
     s.send(str(text).encode())
 
 #decrypts incoming messages locally using own private key
@@ -100,7 +101,7 @@ def send_string_pieces(strings,s,n,e):
 def process_string_pieces(args,s):
     mended_message = args[1]
     while True:
-        x = process_string(s.recv(1024).decode())
+        x = process_string(s.recv(4096).decode())
         if x[-2:] != ';;':
             mended_message += x
             break

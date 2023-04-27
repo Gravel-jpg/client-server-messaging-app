@@ -55,7 +55,7 @@ def update_json_keys(n,d):
 def process_string_pieces(args,client):
     mended_message = args[0][:-2]
     while True:
-        i = process_string(client.recv(1024).decode())
+        i = process_string(client.recv(4096).decode())
         print(f'translated string:{i}')
         if i[-2:] != ';;':
             mended_message += i
