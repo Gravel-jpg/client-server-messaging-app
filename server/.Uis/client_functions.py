@@ -66,20 +66,20 @@ def send_string(string,s,n ,e,encoding):
             x = str(data['str_to_int'][i])
             Msg += x
         print(f'string:{string}')
-        text = crypt(int(Msg),int(e),int(n))
+        text = str(crypt(int(Msg),int(e),int(n)))
         print(f'sent:{text}')
         print(f'length:{len(str(text))}')
-        buffer = len(text)
+        buffer = str(len(text))
         s.send(buffer.encode())
         s.send(str(text).encode())
     else:
-        buffer = len(string)
+        buffer = str(len(string))
         s.send(buffer.encode())
         s.send(string.encode())
 
 # Client recv
 def process_string(s):
-    buffer = s.recv(4).decode()
+    buffer = int(s.recv(4).decode())
     string = s.recv(buffer).decode()
     if ';' in string:
         return string
