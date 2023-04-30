@@ -56,7 +56,7 @@ filename = os.path.join(here, 'Cjson.json')
 #     s.send(str(text).encode())
 
 # Client Send
-def send_string(string,s,n ,e,encoding):
+def send_string(string,s,n,e,encoding):
     if encoding:
         with open(filename,'r') as f:
             data = json.load(f)
@@ -130,17 +130,28 @@ def split_string(string):
 
 
 
-def send_string_pieces(strings,s,n,e):
+def send_string_pieces(strings,s,n,e,encoding):
     for i in strings:
-        send_string(i,s,n,e)
+        send_string(i,s,n,e,encoding)
 
 
 
+
+# def process_string_pieces(args,s):
+#     mended_message = args[1]
+#     while True:
+#         x = process_string(s.recv(4096).decode())
+#         if x[-2:] != ';;':
+#             mended_message += x
+#             break
+#         else:
+#             mended_message += x[:-2]
+#     return mended_message
 
 def process_string_pieces(args,s):
     mended_message = args[1]
     while True:
-        x = process_string(s.recv(4096).decode())
+        x = process_string(s)
         if x[-2:] != ';;':
             mended_message += x
             break

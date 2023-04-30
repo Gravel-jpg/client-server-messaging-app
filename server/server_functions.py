@@ -99,10 +99,22 @@ def update_json_keys(n,d):
     with open(filename,'w') as f:
         json.dump(data,f)
 
+# def process_string_pieces(args,client):
+#     mended_message = args[0][:-2]
+#     while True:
+#         i = process_string(client.recv(4096).decode())
+#         print(f'translated string:{i}')
+#         if i[-2:] != ';;':
+#             mended_message += i
+#             break
+#         else:
+#             mended_message += i[:-2]
+#     return mended_message
+
 def process_string_pieces(args,client):
     mended_message = args[0][:-2]
     while True:
-        i = process_string(client.recv(4096).decode())
+        i = process_string(client)
         print(f'translated string:{i}')
         if i[-2:] != ';;':
             mended_message += i
@@ -110,7 +122,6 @@ def process_string_pieces(args,client):
         else:
             mended_message += i[:-2]
     return mended_message
-
 
 
 def split_string(string):
@@ -126,7 +137,11 @@ def split_string(string):
 
 
 
+# def send_string_pieces(strings,client_uid,cursor,c):
+#     for i in strings:
+#         send_string(i,client_uid,cursor,c)
+
 def send_string_pieces(strings,client_uid,cursor,c):
     for i in strings:
-        send_string(i,client_uid,cursor,c)
+        send_string(i,client_uid,cursor,c,True)
 # an example application would look like send_string_pieces(split_string(f'whatever function needs keys{n},{e}')client_uid,cursor,client)
