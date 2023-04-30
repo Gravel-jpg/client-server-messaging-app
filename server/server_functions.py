@@ -60,18 +60,18 @@ def send_string(string,client_uid,cursor,c,encoding):
             x = str(data['str_to_int'][i])
             Msg += x
         # encrypt
-        text = crypt(int(Msg),int(e),int(n))
-        buffer = len(text)
+        text = str(crypt(int(Msg),int(e),int(n)))
+        buffer = str(len(text))
         c.send(buffer.encode())
         c.send(str(text).encode())
     else:
-        buffer = len(string)
+        buffer = str(len(string))
         c.send(buffer.encode())
         c.send(string.encode())
 
 # Server Recv
 def process_string(c):
-    buffer = c.recv(4).decode()
+    buffer = int(c.recv(4).decode())
     string = c.recv(buffer).decode()
     if ';' in string:
         return string

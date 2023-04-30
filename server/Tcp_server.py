@@ -4,7 +4,7 @@ from time import sleep
 import sqlite3
 from server_functions import *
 
-Host = '192.168.0.8'
+Host = '192.168.0.17'
 Port = 9100
 
 s = socket.socket()
@@ -22,7 +22,8 @@ def client_connection(client,address):
     client_id = None
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
     # client.send(f"{x[0][3]}".encode())
-    send_string(f"{x[0][3]}",None,cursor,client,False)
+    print(len(x[0][3]))
+    send_string(f"server_keys;{x[0][3]}",None,cursor,client,False)
     # Can reduce this string into cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()[0][3]
     while True:
         print(f'The client_id is {client_id}')
