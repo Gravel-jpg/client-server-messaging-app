@@ -21,14 +21,17 @@ def client_connection(client,address):
     print('connection to database established')
     client_id = None
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
-    client.send(f"{x[0][3]}".encode())
+    # client.send(f"{x[0][3]}".encode())
+    send_string(f"{x[0][3]}",None,cursor,client,False)
+    # Can reduce this string into cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()[0][3]
     while True:
         print(f'The client_id is {client_id}')
-        Server_recv = client.recv(4096).decode()
+        # Server_recv = client.recv(4096).decode()
+        Server_recv = process_string(client)
         if not Server_recv:
             print(f'connection with {address} Terminated')
             break
-        Server_recv = process_string(Server_recv)
+        # Server_recv = process_string(Server_recv)
         command = Server_recv.split(';',1)[0]
         args = Server_recv.split(';',1)[1]
         args = args.split(',')
@@ -38,12 +41,14 @@ def client_connection(client,address):
             x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}' AND password = '{args[1]}'").fetchall()
             if x != []:
                 client_id = x[0][2]
-                send_string('login_attempt;True',client_id,cursor,client)
+                # send_string('login_attempt;True',client_id,cursor,client)
+                send_string('login_attempt;True',client_id,cursor,client,True)
                 ###send back something to verify the login
             else:
                 ###send something to verify that login was incorrect
                 print(f'Error: There is no user with the username {args[0]} and the password {args[1]}')
-                client.send('login_attempt;False'.encode())
+                # client.send('login_attempt;False'.encode())
+                send_string('login_attempt;False',None,cursor,client,False)
 
         elif command == 'key_request':
             #Recieves a key request for an existing user based off of username (maybe change to username or uid?), returns users public keys
@@ -51,23 +56,28 @@ def client_connection(client,address):
             if x != []:
                 keys = x[0][3]
                 print(f'keys : {keys}')
-                client.send(keys.encode())
+                # client.send(keys.encode())
+                send_string(keys,client_id,cursor,client,True)
             else:
                 print(f'Error: There is no user with the username {args[0]}')
-                client.send('key_request;False'.encode())
+                # client.send('key_request;False'.encode())
+                send_string('key_request;False',client_id,cursor,client,True)
         elif command == 'send_cipher':
             pass
         elif command == 'create_acc':
             #create_acc;username,pass
             x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()
             if x!= []:
-                client.send(f'create_acc;False'.encode())
+                # client.send(f'create_acc;False'.encode())
+                send_string('create_acc;False',client_id,cursor,client,True)
                 print('Error: username already taken')
             else:
                 #Code to insert new user into database and also have users submit keys.
                 cursor.execute("INSERT INTO mytable (username, password,keys) VALUES (?, ?, ?)", (f'{args[0]}', f'{[1]}',f'{args[2]},{args[3]}'))
                 conn.commit()
-                client.send('create_acc;True'.encode())
+                ###CODE HERE TO GRAB UID### client_uid = querey
+                # client.send('create_acc;True'.encode())
+                send_string('create_acc;True',client_id,cursor,client,True)
                 print('username and password created')
 #             If the username is taken return false
 #             If not, submit te account, grant it a unique uid, set the threads uid == and then return True

@@ -62,15 +62,21 @@ class Ui_Window_Login(QtWidgets.QWidget):
         widget.setCurrentWidget(page2)
     def Login_Function(self):
         #Will attempt to login by sending a message and listening for response in True/False form
-        send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e)
-        x = s.recv(4096).decode()
-        if x == 'login_attempt;False':
-            print('Login False')
+        # send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e)
+        # x = s.recv(4096).decode()
+        # if x == 'login_attempt;False':
+        #     print('Login False')
+        # else:
+        #     x = process_string(x)
+        #     if eval(x.split(';')[1]):
+        #         print('Login True')
+        #         self.Main_Window_Function()
+        send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e,True)
+        if eval(process_string(s).split(';')[1]):
+            print('Login True')
+            self.Main_Window_Function()
         else:
-            x = process_string(x)
-            if eval(x.split(';')[1]):
-                print('Login True')
-                self.Main_Window_Function()
+            print('Error Login False')
     def setupUi(self, Window_Login):
         Window_Login.setObjectName("Window_Login")
         Window_Login.setAccessibleName("")
@@ -111,8 +117,15 @@ class Ui_Window_Create(QtWidgets.QWidget):
     def Back_Function(self):
         widget.setCurrentWidget(page1)
     def Upload_Account(self):
-        s.send(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{n},{e}'.encode())
-        if eval(s.recv(4096).decode().split(';')[1]):
+        # s.send(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{n},{e}'.encode())
+        # if eval(s.recv(4096).decode().split(';')[1]):
+        #     print('Account logged in')
+        #     self.Main_Window_Function()
+        # else:
+        #     print('Error on account creation')
+
+        send_string(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{n},{e}',s,n,e,True)
+        if eval(process_string(s).split(';')[1]):
             print('Account logged in')
             self.Main_Window_Function()
         else:
@@ -157,7 +170,9 @@ if __name__ == '__main__':
     try:
         s.connect((host,port))
         print('connected')
-        n = s.recv(4096).decode()
+        # n = s.recv(4096).decode()
+        # e,n = n.split(',')[1],n.split(',')[0]
+        n = process_string(s)
         e,n = n.split(',')[1],n.split(',')[0]
         print(f'n:{n}\ne:{e}')
     except:

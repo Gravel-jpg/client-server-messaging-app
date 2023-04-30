@@ -183,18 +183,18 @@ def send_string(string,s,n ,e,encoding):
 # List of every .send and .recv that need to be replaced
 
 # Client
-# Upload_Account, line 114 (.send) -Encoding = True
-# Upload_Account, line 115 (if eval .recv)
-# Login_Function, line 66 (x = .recv) 
-# Upload_Keys, line 13 (x = .recv) 
-# Main, line 160 (n,e = .recv) 
+# Complete  --Upload_Account, line 114 (.send) -Encoding = True
+# Complete  --Upload_Account, line 115 (if eval .recv)
+# Complete  --Login_Function, line 66 (x = .recv) 
+# Incomplete  --Upload_Keys, line 13 (x = .recv) 
+# Complete  --Main, line 160 (n,e = .recv) 
 
 
 # Server
-# client_connection, line 24 ({keys} .send) -Encoding = False
-# client_connection, line 27 (Server_Recv = .recv)
-# login_attempt, line 46 ('login_attempt;False'.send) -Encoding = False (should be set to true once this is done)
-# key_request, line 54 (keys.send) -Encoding = True (multiple strings, simple stuff to be completed first)
-# key_request, line 57 ('key_request;False'.send) -Encoding = True
-# create_acc, line 64 ('create_acc;False'.send) -Encoding = True
-# create_acc, line 70 ('create_acc;True'.send) -Encoding = True
+# Complete  --client_connection, line 24 ({keys} .send) -Encoding = False
+# Complete  --client_connection, line 27 (Server_Recv = .recv)
+# Complete  --login_attempt, line 46 ('login_attempt;False'.send) -Encoding = False (should be set to true once this is done)
+# Complete  --key_request, line 54 (keys.send) -Encoding = True (multiple strings, simple stuff to be completed first)
+# Complete  --key_request, line 57 ('key_request;False'.send) -Encoding = True
+# Complete  --create_acc, line 64 ('create_acc;False'.send) -Encoding = True
+# Complete  --create_acc, line 70 ('create_acc;True'.send) -Encoding = True
