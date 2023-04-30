@@ -164,18 +164,17 @@ class Ui_Window_Create(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.179'
+    host = '192.168.0.17'
     port = 9100
     s = socket.socket()
     try:
         s.connect((host,port))
         print('connected')
-        # n = s.recv(4096).decode()
-        # e,n = n.split(',')[1],n.split(',')[0]
-        n = process_string(s)
+        n = process_string(s).split(';')[1]
         e,n = n.split(',')[1],n.split(',')[0]
         print(f'n:{n}\ne:{e}')
-    except:
+    except Exception as ex:
+        print(ex)
         print('ERROR couldnt connect')
     app = QtWidgets.QApplication(sys.argv)
     widget = QtWidgets.QStackedWidget()
