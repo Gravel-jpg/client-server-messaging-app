@@ -88,7 +88,9 @@ def send_string(string,client_uid,cursor,c,encoding):
                 Msg += x
             text = str(crypt(int(Msg),int(e),int(n)))
             buffer = str(len(text)).rjust(4,'0')
+            print(f'send buffer:{buffer}')
             c.send(buffer.encode())
+            print(f'send text:{text}')
             c.send(text.encode())
     else:
         buffer = str(len(string)).rjust(4,'0')
@@ -151,6 +153,8 @@ def process_string(c):
                     break
                 else:
                     mended_message += Msg[:-2]
+            print(f'Whole message:{mended_message}')
+            return mended_message
         else:
             return translated
 

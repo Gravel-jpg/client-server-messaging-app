@@ -86,22 +86,9 @@ def client_connection(client,address):
                 cursor.execute(f"UPDATE main SET keys = '{args[0]+','+args[1]}' WHERE rowid = '{x[0][0]}'")
                 conn.commit()
                 send_string('update_keys;True',client_id,cursor,client,True)
+                print(f'Succesfully updated keys to {args[0]},{args[1]}')
             else:
                 print('Error: update_keys could not find a user who matches the current client, despite them already logging in')
-        # elif command == 'update_keys':
-        #     if args[0][-2:] == ';;':
-        #         #Piece it back together and then start chunkin as normal!
-        #         args = process_string_pieces(args,client).split(',')
-        #         x = cursor.execute(f"SELECT rowid FROM main where uid = '{client_id}").fetchall()
-        #         if x != []:
-        #             cursor.execute(f"UPDATE main SET keys = '{args[0]+','+args[1]}' WHERE rowid = '{x[0][0]}'")
-        #             conn.comit()
-        #             send_string(f'update_keys;True',client_id,cursor,client,True)
-        #         else:
-        #             print('Error: This shouldnt be possible')
-        #     else:
-        #         print('Error: This shouldnt be possible')
-        #         print(args[0][-2:])
         else:
             print(f'Error: command "{command}" not recognised ')
 while True:

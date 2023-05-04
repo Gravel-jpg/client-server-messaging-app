@@ -35,7 +35,7 @@ def generate_keys():
         gen1 = gen2.copy()
         gen2 = gen3.copy()
     d = gen2[0]+m
-    return str(n),str(d),str(e)
+    return int(n),int(d),int(e)
 
 here = os.path.dirname(os.path.abspath(__file__))
 filename = os.path.join(here, 'Cjson.json')
@@ -143,6 +143,7 @@ def process_string(s):
                     break
                 else:
                     mended_message += Msg[:-2]
+            return mended_message
         return translated
 
 

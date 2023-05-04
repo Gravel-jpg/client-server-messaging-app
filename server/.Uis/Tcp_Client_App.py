@@ -9,13 +9,20 @@ class Ui_Window_Main(QtWidgets.QWidget):
         self.setupUi(self)
     def Upload_Keys(self):
         new_n, new_d, new_e = generate_keys()
+        with open(filename,'r') as f:
+            data = json.load(f)
+        old_n, old_d = data['keys']['n'],data['keys']['d']
         send_string(f'update_keys;{new_n},{new_e}',s,n,e,True)
-        # send_string_pieces(split_string(f'update_keys;{new_n},{new_e}'),s,n,e)
-        x = process_string(s.recv(4096).decode())
-        if eval(x.split(';')[1]):
-            update_json_keys(new_n,new_d)
-        else:
-            print('Error: This shouldnt be possible')
+        update_json_keys(new_n,new_d)
+        try:
+            x = process_string(s)
+            print('Sucesfully updated keys')
+        except:
+            data['keys']['n'] = old_n
+            data['keys']['d'] = old_d
+            with open(filename,'w') as f:
+                json.dump(data,f)
+            x = process_string(s)
     def setupUi(self, Window_Main):
         Window_Main.setObjectName("Window_Main")
         self.New_Keys_Button = QtWidgets.QPushButton(Window_Main)
@@ -62,16 +69,6 @@ class Ui_Window_Login(QtWidgets.QWidget):
     def Create_Prompt_Function(self):
         widget.setCurrentWidget(page2)
     def Login_Function(self):
-        #Will attempt to login by sending a message and listening for response in True/False form
-        # send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e)
-        # x = s.recv(4096).decode()
-        # if x == 'login_attempt;False':
-        #     print('Login False')
-        # else:
-        #     x = process_string(x)
-        #     if eval(x.split(';')[1]):
-        #         print('Login True')
-        #         self.Main_Window_Function()
         send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e,True)
         if eval(process_string(s).split(';')[1]):
             print('Login True')
