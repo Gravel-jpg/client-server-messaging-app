@@ -18,10 +18,7 @@ class Ui_Window_Main(QtWidgets.QWidget):
             x = process_string(s)
             print('Sucesfully updated keys')
         except:
-            data['keys']['n'] = old_n
-            data['keys']['d'] = old_d
-            with open(filename,'w') as f:
-                json.dump(data,f)
+            update_json_keys(old_n,old_d)
             x = process_string(s)
     def setupUi(self, Window_Main):
         Window_Main.setObjectName("Window_Main")
@@ -162,7 +159,7 @@ class Ui_Window_Create(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.17'
+    host = '192.168.0.19'
     port = 9100
     s = socket.socket()
     try:
