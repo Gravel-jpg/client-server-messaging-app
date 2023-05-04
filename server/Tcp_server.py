@@ -90,7 +90,7 @@ def client_connection(client,address):
                 if x != []:
                     cursor.execute(f"UPDATE main SET keys = '{args[0]+','+args[1]}' WHERE rowid = '{x[0][0]}'")
                     conn.comit()
-                    send_string(f'update_keys;True',client_id,cursor,client)
+                    send_string(f'update_keys;True',client_id,cursor,client,True)
                 else:
                     print('Error: This shouldnt be possible')
             else:

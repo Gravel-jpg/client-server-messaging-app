@@ -45,6 +45,30 @@ filename = os.path.join(here, 'Sjson.json')
 #     c.send(str(text).encode())
 
 # Server Send
+# def send_string(string,client_uid,cursor,c,encoding):
+#     if encoding:
+#     # find users keys
+#         selected = cursor.execute(f"SELECT keys FROM main WHERE uid = '{client_uid}'").fetchall()
+#         n,e = selected[0][0].split(',')[0],selected[0][0].split(',')[1]
+#         # load shift cipher
+#         with open(filename,'r') as f:
+#             data = json.load(f)
+#         Msg =  ''
+#         # Shift
+#         for i in string:
+#             i = str(i)
+#             x = str(data['str_to_int'][i])
+#             Msg += x
+#         # encrypt
+#         text = str(crypt(int(Msg),int(e),int(n)))
+#         buffer = str(len(text))
+#         c.send(buffer.encode())
+#         c.send(str(text).encode())
+#     else:
+#         buffer = str(len(string))
+#         c.send(buffer.encode())
+#         c.send(string.encode())
+# Server Send
 def send_string(string,client_uid,cursor,c,encoding):
     if encoding:
     # find users keys
@@ -53,22 +77,39 @@ def send_string(string,client_uid,cursor,c,encoding):
         # load shift cipher
         with open(filename,'r') as f:
             data = json.load(f)
-        Msg =  ''
-        # Shift
-        for i in string:
-            i = str(i)
-            x = str(data['str_to_int'][i])
-            Msg += x
-        # encrypt
-        text = str(crypt(int(Msg),int(e),int(n)))
-        buffer = str(len(text))
-        c.send(buffer.encode())
-        c.send(str(text).encode())
+        strings = split_string(string)
+        for i in strings:
+            x = ''
+            for j in i:
+                x = str(data['str_to_int'][str(j)])
+                Msg += x
+            text = str(crypt(int(Msg),int(e),int(n)))
+            buffer = str(len(text))
+            c.send(buffer.encode())
+            c.send(text.encode())
     else:
         buffer = str(len(string))
         c.send(buffer.encode())
         c.send(string.encode())
 
+# # Server Recv
+# def process_string(c):
+#     buffer = int(c.recv(4).decode())
+#     string = c.recv(buffer).decode()
+#     if ';' in string:
+#         return string
+#     else:
+#         print(f'precrypted:{string}')
+#         with open(filename,'r') as f:
+#             data = json.load(f)
+#         string = int(string)
+#         text = str(crypt(string,data['keys']['d'],data['keys']['n']))
+#         print(f'crypted:{text}')
+#         text = [text[i:i+2] for i in range(0, len(text), 2)]
+#         translated = ''
+#         for i in text:
+#             translated += data['int_to_str'][i]
+#         return translated
 # Server Recv
 def process_string(c):
     buffer = int(c.recv(4).decode())
@@ -86,8 +127,23 @@ def process_string(c):
         translated = ''
         for i in text:
             translated += data['int_to_str'][i]
-        return translated
-
+        if translated[-2:] == ';;':
+            mended_message = translated[:-2]
+            while True:
+                buffer = int(c.recv(4))
+                i = int(c.recv(buffer))
+                i = str(crypt(i,data['keys']['d'],data['keys']['n']))
+                i = [i[j:j+2] for j in range(0,len(j),2)]
+                Msg = ''
+                for j in i:
+                    Msg += data['int_to_str'][i]
+                if Msg[-2:] != ';;':
+                    mended_message += Msg
+                    break
+                else:
+                    mended_message += Msg[:-2]
+        else:
+            return translated
 
 
 

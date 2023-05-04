@@ -55,27 +55,63 @@ filename = os.path.join(here, 'Cjson.json')
 #     print(f'length:{len(str(text))}')
 #     s.send(str(text).encode())
 
+# # Client Send
+# def send_string(string,s,n,e,encoding):
+#     if encoding:
+#         with open(filename,'r') as f:
+#             data = json.load(f)
+#         Msg =  ''
+#         for i in string:
+#             i = str(i)
+#             x = str(data['str_to_int'][i])
+#             Msg += x
+#         print(f'string:{string}')
+#         text = str(crypt(int(Msg),int(e),int(n)))
+#         print(f'sent:{text}')
+#         print(f'length:{len(str(text))}')
+#         buffer = str(len(text))
+#         s.send(buffer.encode())
+#         s.send(str(text).encode())
+#     else:
+#         buffer = str(len(string))
+#         s.send(buffer.encode())
+#         s.send(string.encode())
+
 # Client Send
 def send_string(string,s,n,e,encoding):
     if encoding:
         with open(filename,'r') as f:
             data = json.load(f)
-        Msg =  ''
-        for i in string:
-            i = str(i)
-            x = str(data['str_to_int'][i])
-            Msg += x
-        print(f'string:{string}')
-        text = str(crypt(int(Msg),int(e),int(n)))
-        print(f'sent:{text}')
-        print(f'length:{len(str(text))}')
-        buffer = str(len(text))
-        s.send(buffer.encode())
-        s.send(str(text).encode())
+        strings = split_string(string)
+        for i in strings:
+            Msg = ''
+            for j in i:
+                Msg += str(data['str_to_int'][j])
+            text = str(crypt(int(Msg),int(e),int(n)))
+            buffer = str(len(text))
+            s.send(buffer.encode())
+            s.send(text.encode())
     else:
         buffer = str(len(string))
         s.send(buffer.encode())
         s.send(string.encode())
+
+# # Client recv
+# def process_string(s):
+#     buffer = int(s.recv(4).decode())
+#     string = s.recv(buffer).decode()
+#     if ';' in string:
+#         return string
+#     else:
+#         with open(filename,'r') as f:
+#             data = json.load(f)
+#         string = int(string)
+#         text = str(crypt(string,data['keys']['d'],data['keys']['n']))
+#         text = [text[i:i+2] for i in range(0, len(text), 2)]
+#         translated = ''
+#         for i in text:
+#             translated += data['int_to_str'][i]
+#         return translated
 
 # Client recv
 def process_string(s):
@@ -92,7 +128,23 @@ def process_string(s):
         translated = ''
         for i in text:
             translated += data['int_to_str'][i]
+        if translated[-2:] == ';;':
+            mended_message = translated[:-2]
+            while True:
+                buffer = int(s.recv(4))
+                i = int(s.recv(buffer))
+                i = str(crypt(i,data['keys']['d'],data['keys']['n']))
+                i = [i[j:j+2] for j in range(0,len(i),2)]
+                Msg = ''
+                for j in i:
+                    Msg += data['int_to_str'][j]
+                if Msg[-2:] != ';;':
+                    mended_message += Msg
+                    break
+                else:
+                    mended_message += Msg[:-2]
         return translated
+
 
 #decrypts incoming messages locally using own private key
 # def process_string(string):
