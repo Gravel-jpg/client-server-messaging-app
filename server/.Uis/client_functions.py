@@ -55,7 +55,7 @@ filename = os.path.join(here, 'Cjson.json')
 #     print(f'length:{len(str(text))}')
 #     s.send(str(text).encode())
 
-# # Client Send
+# Old Client Send
 # def send_string(string,s,n,e,encoding):
 #     if encoding:
 #         with open(filename,'r') as f:
@@ -96,7 +96,7 @@ def send_string(string,s,n,e,encoding):
         s.send(buffer.encode())
         s.send(string.encode())
 
-# # Client recv
+# Old Client recv
 # def process_string(s):
 #     buffer = int(s.recv(4).decode())
 #     string = s.recv(buffer).decode()
@@ -167,9 +167,6 @@ def update_json_keys(n,d):
         json.dump(data,f)
         
 
-
-
-
 def split_string(string):
     length = len(string)
     strings = []
@@ -182,9 +179,9 @@ def split_string(string):
 
 
 
-def send_string_pieces(strings,s,n,e,encoding):
-    for i in strings:
-        send_string(i,s,n,e,encoding)
+# def send_string_pieces(strings,s,n,e,encoding):
+#     for i in strings:
+#         send_string(i,s,n,e,encoding)
 
 
 
@@ -200,13 +197,13 @@ def send_string_pieces(strings,s,n,e,encoding):
 #             mended_message += x[:-2]
 #     return mended_message
 
-def process_string_pieces(args,s):
-    mended_message = args[1]
-    while True:
-        x = process_string(s)
-        if x[-2:] != ';;':
-            mended_message += x
-            break
-        else:
-            mended_message += x[:-2]
-    return mended_message
+# def process_string_pieces(args,s):
+#     mended_message = args[1]
+#     while True:
+#         x = process_string(s)
+#         if x[-2:] != ';;':
+#             mended_message += x
+#             break
+#         else:
+#             mended_message += x[:-2]
+#     return mended_message

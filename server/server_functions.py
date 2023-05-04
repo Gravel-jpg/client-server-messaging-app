@@ -44,7 +44,10 @@ filename = os.path.join(here, 'Sjson.json')
 #     text = crypt(int(Msg),int(e),int(n))
 #     c.send(str(text).encode())
 
-# Server Send
+
+
+
+# Old Server Send
 # def send_string(string,client_uid,cursor,c,encoding):
 #     if encoding:
 #     # find users keys
@@ -92,7 +95,7 @@ def send_string(string,client_uid,cursor,c,encoding):
         c.send(buffer.encode())
         c.send(string.encode())
 
-# # Server Recv
+# Old Server Recv
 # def process_string(c):
 #     buffer = int(c.recv(4).decode())
 #     string = c.recv(buffer).decode()
@@ -167,17 +170,17 @@ def update_json_keys(n,d):
 #             mended_message += i[:-2]
 #     return mended_message
 
-def process_string_pieces(args,client):
-    mended_message = args[0][:-2]
-    while True:
-        i = process_string(client)
-        print(f'translated string:{i}')
-        if i[-2:] != ';;':
-            mended_message += i
-            break
-        else:
-            mended_message += i[:-2]
-    return mended_message
+# def process_string_pieces(args,client):
+#     mended_message = args[0][:-2]
+#     while True:
+#         i = process_string(client)
+#         print(f'translated string:{i}')
+#         if i[-2:] != ';;':
+#             mended_message += i
+#             break
+#         else:
+#             mended_message += i[:-2]
+#     return mended_message
 
 
 def split_string(string):
