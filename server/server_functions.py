@@ -82,16 +82,16 @@ def send_string(string,client_uid,cursor,c,encoding):
             data = json.load(f)
         strings = split_string(string)
         for i in strings:
-            x = ''
+            Msg = ''
             for j in i:
                 x = str(data['str_to_int'][str(j)])
                 Msg += x
             text = str(crypt(int(Msg),int(e),int(n)))
-            buffer = str(len(text))
+            buffer = str(len(text)).rjust(4,'0')
             c.send(buffer.encode())
             c.send(text.encode())
     else:
-        buffer = str(len(string))
+        buffer = str(len(string)).rjust(4,'0')
         c.send(buffer.encode())
         c.send(string.encode())
 
@@ -130,16 +130,22 @@ def process_string(c):
         translated = ''
         for i in text:
             translated += data['int_to_str'][i]
+        print(f'translated:{translated}')
         if translated[-2:] == ';;':
             mended_message = translated[:-2]
+            print(f'Mended_message:{mended_message}')
             while True:
                 buffer = int(c.recv(4))
+                print(f'buffer:{buffer}')
                 i = int(c.recv(buffer))
+                print(f'precrypted recieved:{i}')
                 i = str(crypt(i,data['keys']['d'],data['keys']['n']))
-                i = [i[j:j+2] for j in range(0,len(j),2)]
+                i = [i[j:j+2] for j in range(0,len(i),2)]
                 Msg = ''
                 for j in i:
-                    Msg += data['int_to_str'][i]
+                    Msg += data['int_to_str'][j]
+                
+                print(f'Part:{Msg}')
                 if Msg[-2:] != ';;':
                     mended_message += Msg
                     break

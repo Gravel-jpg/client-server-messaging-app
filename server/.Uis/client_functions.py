@@ -88,11 +88,11 @@ def send_string(string,s,n,e,encoding):
             for j in i:
                 Msg += str(data['str_to_int'][j])
             text = str(crypt(int(Msg),int(e),int(n)))
-            buffer = str(len(text))
+            buffer = str(len(text)).rjust(4,'0')
             s.send(buffer.encode())
             s.send(text.encode())
     else:
-        buffer = str(len(string))
+        buffer = str(len(string)).rjust(4,'0')
         s.send(buffer.encode())
         s.send(string.encode())
 
