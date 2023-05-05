@@ -111,20 +111,16 @@ class Ui_Window_Create(QtWidgets.QWidget):
         self.setupUi(self)
     def Back_Function(self):
         widget.setCurrentWidget(page1)
+    def Main_Window_Function(self):
+        widget.setCurrentWidget(page3)
     def Upload_Account(self):
-        # s.send(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{n},{e}'.encode())
-        # if eval(s.recv(4096).decode().split(';')[1]):
-        #     print('Account logged in')
-        #     self.Main_Window_Function()
-        # else:
-        #     print('Error on account creation')
-
-        send_string(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{n},{e}',s,n,e,True)
-        if eval(process_string(s).split(';')[1]):
-            print('Account logged in')
+        new_n, new_d, new_e = generate_keys()
+        send_string(f'create_acc;{self.New_Username_Field},{self.New_Password_Field},{new_n},{new_e}',s,n,e,True)
+        if eval(process_string(s)).split(';')[1]:
+            update_json_keys(new_n,new_d)
             self.Main_Window_Function()
         else:
-            print('Error on account creation')
+            print('Login not verified by server')
     def setupUi(self, Window_Create):
         Window_Create.setObjectName("Window_Create")
         self.Back_Button = QtWidgets.QPushButton(Window_Create)
