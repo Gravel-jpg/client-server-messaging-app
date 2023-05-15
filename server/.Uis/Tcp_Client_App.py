@@ -1,12 +1,26 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-
-
-
-
+from PyQt5 import QtCore, QtWidgets
 class Ui_Window_Main(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+    def Send_Message_Function(self):
+        # Client sends string 'key_request;{self.Recipient_Username_Field.text()}'
+        # Client sends string 'send_cipher;{self.Message_Field.text()}'
+        send_string(f'key_request;{self.Recipient_Username_Field.text()}',s,n,e,True)
+        Recipient_Keys = process_string.split(';')[1]
+        # [n,e]
+        Recipient_Keys = [Recipient_Keys.split(',')[0],Recipient_Keys.split(',')[1]]
+        # To locally encrypt the message to the recipients keys
+        with open(filename,'r') as f:
+            data = json.load(f)
+            strings = split_string(self.Message_Field.text())
+            for i in strings:
+                Msg = ''
+                for j in i:
+                    Msg += str(data['str_to_int'][j])
+                outgoing_ciphertext = str(crypt(int(Msg),int(e),int(n)))
+                send_string(outgoing_ciphertext,s,n,e,True)
+        
     def Upload_Keys(self):
         new_n, new_d, new_e = generate_keys()
         with open(filename,'r') as f:
@@ -48,6 +62,7 @@ class Ui_Window_Main(QtWidgets.QWidget):
         self.Window_Main_Layout.addWidget(self.Send_Button, 2, 2, 1, 1)
         # Buttons go here
         self.New_Keys_Button.clicked.connect(self.Upload_Keys)
+        self.Send_Button.clicked.connect(self.Send_Message_Function)
         self.retranslateUi(Window_Main)
         QtCore.QMetaObject.connectSlotsByName(Window_Main)
     def retranslateUi(self, Window_Main):
@@ -180,6 +195,6 @@ if __name__ == '__main__':
     #Set window size
     widget.setFixedSize(400,300)
     #Setting up first window shown
-    widget.setCurrentWidget(page1)
+    widget.setCurrentWidget(page3)
     widget.show()
     sys.exit(app.exec_())

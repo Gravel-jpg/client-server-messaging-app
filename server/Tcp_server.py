@@ -8,11 +8,11 @@ Host = '192.168.0.19'
 Port = 9100
 
 s = socket.socket()
-# Links server to given port on ip, any traffic to that port is redirected to ME!
+# Links server to given port on ip, any traffic to that port is redirected to here
 s.bind((Host,Port))
 print(f'bound to :{Host}:{Port}')
 
-# opens server to outside connections i think :/
+# opens server to outside connections
 s.listen()
 def client_connection(client,address):
     db_name = os.path.join(here,'server_database.db')
@@ -22,15 +22,12 @@ def client_connection(client,address):
     client_id = None
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
     send_string(f"server_keys;{x[0][3]}",None,cursor,client,False)
-    # Can reduce this string into cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()[0][3]
     while True:
         print(f'The client_id is {client_id}')
-        # Server_recv = client.recv(4096).decode()
         Server_recv = process_string(client)
         if not Server_recv:
             print(f'connection with {address} Terminated')
             break
-        # Server_recv = process_string(Server_recv)
         command = Server_recv.split(';',1)[0]
         args = Server_recv.split(';',1)[1]
         args = args.split(',')
@@ -44,18 +41,18 @@ def client_connection(client,address):
                 send_string('login_attempt;False',None,cursor,client,False)
         elif command == 'key_request':
             #Recieves a key request for an existing user based off of username (maybe change to username or uid?), returns users public keys
-            x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()
+            recipient = args[0]
+            x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()[0][3]
+            print(x)
             if x != []:
-                keys = x[0][3]
-                print(f'keys : {keys}')
-                # client.send(keys.encode())
-                send_string(keys,client_id,cursor,client,True)
+                # keys = x
+                # print(f'keys : {x}')
+                send_string(f'key_request;{x}',client_id,cursor,client,True)
+                ciphertext = process_string(client).split(';')[1]
+                # Commit the outgoing ciphertext and username to backlog in the DB
             else:
-                print(f'Error: There is no user with the username {args[0]}')
-                # client.send('key_request;False'.encode())
+                print(f'Error: There is no user with the username: {args[0]}')
                 send_string('key_request;False',client_id,cursor,client,True)
-        elif command == 'send_cipher':
-            pass
         elif command == 'create_acc':
             x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()
             if x!= []:

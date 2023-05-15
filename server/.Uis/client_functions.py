@@ -100,9 +100,10 @@ def update_json_keys(n,d):
     with open(filename,'w') as f:
         json.dump(data,f)
         
-
+# This function breaks down an input string into multiple smaller segments, all of which are to be translated and sent individually.
+# This is in order to avoid breaking the character limit of the rsa algorithm 
 def split_string(string):
-    length = len(string)
+    # length = len(string) Possible useless line if it is remove it in server_functions as well.
     strings = []
     while string != '':
         x = string[:100]
@@ -110,3 +111,19 @@ def split_string(string):
         string = string[100:]
     strings[-1] = strings[-1][:-2]
     return strings
+
+# Implement this later maybe to cut down on repeated lines
+# This function turns characters into an int for the purpose of locally encrypting/decrypting a users messages
+# def shift(inp,n,e,dict):
+#     with open(filename,'r') as f:
+#         data = json.load(f)
+#         strings = split_string(inp)
+#         for i in strings:
+#             Msg = ''
+#             for j in i:
+#                 Msg += str(data[dict][j])
+#             text = str(crypt(int(Msg),int(e),int(n)))
+#             return text
+#     elif dict == '':
+# pass
+        
