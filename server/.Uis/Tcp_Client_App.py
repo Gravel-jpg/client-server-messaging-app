@@ -7,18 +7,22 @@ class Ui_Window_Main(QtWidgets.QWidget):
         # Client sends string 'key_request;{self.Recipient_Username_Field.text()}'
         # Client sends string 'send_cipher;{self.Message_Field.text()}'
         send_string(f'key_request;{self.Recipient_Username_Field.text()}',s,n,e,True)
-        Recipient_Keys = process_string.split(';')[1]
+        Recipient_Keys = process_string(s).split(';')[1]
+        print(Recipient_Keys)
+        if not eval(Recipient_Keys):
+            print(f'Error invalid username')
+            return
         # [n,e]
         Recipient_Keys = [Recipient_Keys.split(',')[0],Recipient_Keys.split(',')[1]]
         # To locally encrypt the message to the recipients keys
         with open(filename,'r') as f:
             data = json.load(f)
-            strings = split_string(self.Message_Field.text())
+            strings = split_string(self.Message_Field.toPlainText())
             for i in strings:
                 Msg = ''
                 for j in i:
                     Msg += str(data['str_to_int'][j])
-                outgoing_ciphertext = str(crypt(int(Msg),int(e),int(n)))
+                outgoing_ciphertext = str(crypt(int(Msg),int(Recipient_Keys[1]),int(Recipient_Keys[0])))
                 send_string(outgoing_ciphertext,s,n,e,True)
         
     def Upload_Keys(self):
@@ -170,7 +174,7 @@ class Ui_Window_Create(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.19'
+    host = '192.168.0.185'
     port = 9100
     s = socket.socket()
     try:
@@ -195,6 +199,6 @@ if __name__ == '__main__':
     #Set window size
     widget.setFixedSize(400,300)
     #Setting up first window shown
-    widget.setCurrentWidget(page3)
+    widget.setCurrentWidget(page1)
     widget.show()
     sys.exit(app.exec_())
