@@ -43,12 +43,14 @@ def client_connection(client,address):
             #Recieves a key request for an existing user based off of username (maybe change to username or uid?), returns users public keys
             recipient = args[0]
             x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()[0][3]
-            print(x)
+            print(f'x:{X}')
             if x != []:
                 # keys = x
                 # print(f'keys : {x}')
                 send_string(f'key_request;{x}',client_id,cursor,client,True)
-                ciphertext = process_string(client).split(';')[1]
+                ciphertext = process_string(client)
+                ciphertext = ciphertext.split(';')[1]
+                print(f'final ciphertext to db {ciphertext}')
                 # Commit the outgoing ciphertext and username to backlog in the DB
             else:
                 print(f'Error: There is no user with the username: {args[0]}')
