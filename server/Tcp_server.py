@@ -4,7 +4,7 @@ from time import sleep
 import sqlite3
 from server_functions import *
 
-Host = '192.168.0.19'
+Host = '192.168.0.181'
 Port = 9100
 
 s = socket.socket()
@@ -43,7 +43,7 @@ def client_connection(client,address):
             #Recieves a key request for an existing user based off of username (maybe change to username or uid?), returns users public keys
             recipient = args[0]
             x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()[0][3]
-            print(f'x:{X}')
+            print(f'x:{x}')
             if x != []:
                 # keys = x
                 # print(f'keys : {x}')
