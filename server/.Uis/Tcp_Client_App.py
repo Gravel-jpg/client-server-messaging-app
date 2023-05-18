@@ -15,12 +15,19 @@ class Ui_Window_Main(QtWidgets.QWidget):
         # [n,e]
         Recipient_Keys = [Recipient_Keys[1].split(',')[0],Recipient_Keys[1].split(',')[1]]
         Recipient_strings = split_string(f'send_cipher;{self.Message_Field.toPlainText()}')
-        Msg = 'send_cipher;'
-        for i in Recipient_strings:
-            Msg += f'{i},'
-        Msg = Msg[:-1]
-        print(f'message: {Msg}\nlength:{len(Msg)}')
-        send_string(Msg,s,n,e,True)
+        # Encrypt all pieces 
+        Recipient_Msg = 'send_cipher;'
+        with open(filename,'r') as f:
+            data = json.load(f)
+            for i in Recipient_strings:
+                Msg = ''
+                for j in i:
+                    Msg += str(data['str_to_int'][j])
+                text = str(crypt(int(Msg),int(e),int(n)))
+                Recipient_Msg += f'{text},'
+        Recipient_Msg = Recipient_Msg[:-1]
+        print(f'message: {Recipient_Msg}\nlength:{len(Recipient_Msg)}')
+        send_string(Recipient_Msg,s,n,e,True)
         # encrypt all pieces to recipient keys
         # send big message
         
@@ -133,11 +140,18 @@ class Ui_Window_Create(QtWidgets.QWidget):
         widget.setCurrentWidget(page3)
     def Upload_Account(self):
         new_n, new_d, new_e = generate_keys()
-        send_string(f'create_acc;{self.New_Username_Field},{self.New_Password_Field},{new_n},{new_e}',s,n,e,True)
-        if eval(process_string(s)).split(';')[1]:
+        with open(filename,'r') as f:
+            data = json.load(f)
+            old_n, old_d = data['keys']['n'],data['keys']['d']
+        update_json_keys(new_n,new_d)
+        send_string(f'create_acc;{self.New_Username_Field.text()},{self.New_Password_Field.text()},{new_n},{new_e}',s,n,e,True)
+        try:
+            x = process_string(s)
             update_json_keys(new_n,new_d)
             self.Main_Window_Function()
-        else:
+        except:
+            x = process_string(s)
+            update_json_keys(old_n,old_d)
             print('Login not verified by server')
     def setupUi(self, Window_Create):
         Window_Create.setObjectName("Window_Create")
@@ -156,10 +170,11 @@ class Ui_Window_Create(QtWidgets.QWidget):
         self.New_Username_Field = QtWidgets.QLineEdit(Window_Create)
         self.New_Username_Field.setGeometry(QtCore.QRect(151, 90, 133, 20))
         self.New_Username_Field.setObjectName("New_Username_Field")
-        self.Create_Accoun_Button = QtWidgets.QPushButton(Window_Create)
-        self.Create_Accoun_Button.setGeometry(QtCore.QRect(151, 171, 83, 23))
-        self.Create_Accoun_Button.setObjectName("Create_Accoun_Button")
+        self.Create_Account_Button = QtWidgets.QPushButton(Window_Create)
+        self.Create_Account_Button.setGeometry(QtCore.QRect(151, 171, 83, 23))
+        self.Create_Account_Button.setObjectName("Create_Account_Button")
         # Buttons go here
+        self.Create_Account_Button.clicked.connect(self.Upload_Account)
         self.Back_Button.clicked.connect(self.Back_Function)
         self.retranslateUi(Window_Create)
         QtCore.QMetaObject.connectSlotsByName(Window_Create)
@@ -168,12 +183,12 @@ class Ui_Window_Create(QtWidgets.QWidget):
         Window_Create.setWindowTitle(_translate("Window_Create", "Create Account"))
         self.New_Username_Label.setText(_translate("Window_Create", "username:"))
         self.New_Password_Label.setText(_translate("Window_Create", "password:"))
-        self.Create_Accoun_Button.setText(_translate("Window_Create", "Create Account"))
+        self.Create_Account_Button.setText(_translate("Window_Create", "Create Account"))
         self.Back_Button.setText(_translate("Window_Create", "Back"))
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.8'
+    host = '192.168.0.184'
     port = 9100
     s = socket.socket()
     try:

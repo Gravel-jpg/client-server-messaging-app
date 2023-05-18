@@ -45,12 +45,12 @@ def client_connection(client,address):
             x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()[0][3]
             print(f'x:{x}')
             if x != []:
-                # keys = x
-                # print(f'keys : {x}')
                 send_string(f'key_request;{x}',client_id,cursor,client,True)
                 ciphertext = process_string(client)
                 ciphertext = ciphertext.split(';')[1]
                 print(f'final ciphertext to db {ciphertext}')
+                cursor.execute("INSERT INTO mytable (username, password,keys) VALUES (?, ?, ?)", (f'{args[0]}', f'{[1]}',f'{args[2]},{args[3]}'))
+                conn.commit()
                 # Commit the outgoing ciphertext and username to backlog in the DB
             else:
                 print(f'Error: There is no user with the username: {args[0]}')
