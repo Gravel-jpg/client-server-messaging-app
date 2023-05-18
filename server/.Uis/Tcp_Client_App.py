@@ -14,16 +14,15 @@ class Ui_Window_Main(QtWidgets.QWidget):
             return
         # [n,e]
         Recipient_Keys = [Recipient_Keys[1].split(',')[0],Recipient_Keys[1].split(',')[1]]
-        # To locally encrypt the message to the recipients keys
-        with open(filename,'r') as f:
-            data = json.load(f)
-            strings = split_string(f'send_cipher;{self.Message_Field.toPlainText()}')
-            for i in strings:
-                Msg = ''
-                for j in i:
-                    Msg += str(data['str_to_int'][j])
-                outgoing_ciphertext = str(crypt(int(Msg),int(Recipient_Keys[1]),int(Recipient_Keys[0])))
-                send_string(outgoing_ciphertext,s,n,e,True)
+        Recipient_strings = split_string(f'send_cipher;{self.Message_Field.toPlainText()}')
+        Msg = 'send_cipher;'
+        for i in Recipient_strings:
+            Msg += f'{i},'
+        Msg = Msg[:-1]
+        print(f'message: {Msg}\nlength:{len(Msg)}')
+        send_string(Msg,s,n,e,True)
+        # encrypt all pieces to recipient keys
+        # send big message
         
     def Upload_Keys(self):
         new_n, new_d, new_e = generate_keys()
