@@ -41,15 +41,16 @@ def client_connection(client,address):
                 send_string('login_attempt;False',None,cursor,client,False)
         elif command == 'key_request':
             #Recieves a key request for an existing user based off of username (maybe change to username or uid?), returns users public keys
-            recipient = args[0]
-            x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()[0][3]
+            x = cursor.execute(f"SELECT * FROM main WHERE username = '{args[0]}'").fetchall()[0]
+            recipient = x[2]
+            x = [3]
             print(f'x:{x}')
             if x != []:
                 send_string(f'key_request;{x}',client_id,cursor,client,True)
                 ciphertext = process_string(client)
                 ciphertext = ciphertext.split(';')[1]
                 print(f'final ciphertext to db {ciphertext}')
-                cursor.execute("INSERT INTO backlog (outgoing ciphertext,recipient) VALUES (?, ?)", (f'{ciphertext}',f'{recipient}'))
+                cursor.execute("INSERT INTO backlog ('outgoing ciphertext','recipient') VALUES (?, ?)", (f'{ciphertext}',f'{recipient}'))
                 conn.commit()
                 # Commit the outgoing ciphertext and username to backlog in the DB
             else:
@@ -61,7 +62,7 @@ def client_connection(client,address):
                 send_string('create_acc;False',client_id,cursor,client,True)
                 print('Error: username already taken')
             else:
-                cursor.execute("INSERT INTO main (username, password,keys) VALUES (?, ?, ?)", (f'{args[0]}', f'{[1]}',f'{args[2]},{args[3]}'))
+                cursor.execute("INSERT INTO main ('username', 'password','keys') VALUES (?, ?, ?)", (f'{args[0]}', f'{[1]}',f'{args[2]},{args[3]}'))
                 conn.commit()
                 # Not sure if the line below will do what i want
                 client_id = cursor.execute(f"SELECT uid FROM main where username = '{args[0]}'").fetchall()[0][0]
