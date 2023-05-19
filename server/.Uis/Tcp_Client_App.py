@@ -4,8 +4,6 @@ class Ui_Window_Main(QtWidgets.QWidget):
         super().__init__()
         self.setupUi(self)
     def Send_Message_Function(self):
-        # Client sends string 'key_request;{self.Recipient_Username_Field.text()}'
-        # Client sends string 'send_cipher;{self.Message_Field.text()}'
         send_string(f'key_request;{self.Recipient_Username_Field.text()}',s,n,e,True)
         Recipient_Keys = process_string(s).split(';')
         print(Recipient_Keys[1])
@@ -28,6 +26,8 @@ class Ui_Window_Main(QtWidgets.QWidget):
         Recipient_Msg = Recipient_Msg[:-1]
         print(f'message: {Recipient_Msg}\nlength:{len(Recipient_Msg)}')
         send_string(Recipient_Msg,s,n,e,True)
+        x = process_string(s)
+        print(f'confirmation {x}')
         # encrypt all pieces to recipient keys
         # send big message
         
@@ -188,7 +188,7 @@ class Ui_Window_Create(QtWidgets.QWidget):
 if __name__ == '__main__':
     import sys, socket
     from client_functions import *
-    host = '192.168.0.184'
+    host = '192.168.0.183'
     port = 9100
     s = socket.socket()
     try:
