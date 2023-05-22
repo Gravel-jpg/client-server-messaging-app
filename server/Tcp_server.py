@@ -4,7 +4,7 @@ from time import sleep
 import sqlite3
 from server_functions import *
 
-Host = '192.168.0.181'
+Host = '192.168.0.6'
 Port = 9100
 
 s = socket.socket()
@@ -63,7 +63,7 @@ def client_connection(client,address):
                 send_string('create_acc;False',client_id,cursor,client,True)
                 print('Error: username already taken')
             else:
-                cursor.execute("INSERT INTO main ('username', 'password','keys') VALUES (?, ?, ?)", (f'{args[0]}', f'{[1]}',f'{args[2]},{args[3]}'))
+                cursor.execute("INSERT INTO main ('username', 'password','keys') VALUES (?, ?, ?)", (f'{args[0]}', f'{args[1]}',f'{args[2]},{args[3]}'))
                 conn.commit()
                 # Not sure if the line below will do what i want
                 client_id = cursor.execute(f"SELECT uid FROM main where username = '{args[0]}'").fetchall()[0][0]
