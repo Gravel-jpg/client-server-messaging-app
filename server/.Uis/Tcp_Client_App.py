@@ -1,14 +1,21 @@
 from PyQt5 import QtCore, QtWidgets
 class Ui_Window_Main(QtWidgets.QWidget):
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
     def Send_Message_Function(self):
+        global MIP, LIP
+        while LIP:
+            time.sleep(1)
+        MIP = True
+        s.setblocking(True)
         send_string(f'key_request;{self.Recipient_Username_Field.text()}',s,n,e,True)
         Recipient_Keys = process_string(s).split(';')
-        print(Recipient_Keys[1])
+        # print(Recipient_Keys[1])
         if Recipient_Keys[1] == 'False':
             print(f'Error invalid username')
+            MIP = False
             return
         # [n,e]
         Recipient_Keys = [Recipient_Keys[1].split(',')[0],Recipient_Keys[1].split(',')[1]]
@@ -28,10 +35,15 @@ class Ui_Window_Main(QtWidgets.QWidget):
         send_string(Recipient_Msg,s,n,e,True)
         x = process_string(s)
         print(f'confirmation {x}')
+        MIP = False
         # encrypt all pieces to recipient keys
         # send big message
-        
     def Upload_Keys(self):
+        global MIP, LIP
+        while LIP:
+            time.sleep(1)
+        MIP = True
+        s.setblocking(True)
         new_n, new_d, new_e = generate_keys()
         with open(filename,'r') as f:
             data = json.load(f)
@@ -41,9 +53,11 @@ class Ui_Window_Main(QtWidgets.QWidget):
         try:
             x = process_string(s)
             print('Sucesfully updated keys')
+            MIP = False
         except:
             update_json_keys(old_n,old_d)
             x = process_string(s)
+            MIP = False
     def setupUi(self, Window_Main):
         Window_Main.setObjectName("Window_Main")
         self.New_Keys_Button = QtWidgets.QPushButton(Window_Main)
@@ -87,6 +101,8 @@ class Ui_Window_Login(QtWidgets.QWidget):
         super().__init__()
         self.setupUi(self)
     def Main_Window_Function(self):
+        global MIP
+        MIP = False
         widget.setCurrentWidget(page3)
     def Create_Prompt_Function(self):
         widget.setCurrentWidget(page2)
@@ -137,6 +153,8 @@ class Ui_Window_Create(QtWidgets.QWidget):
     def Back_Function(self):
         widget.setCurrentWidget(page1)
     def Main_Window_Function(self):
+        global MIP
+        MIP = False
         widget.setCurrentWidget(page3)
     def Upload_Account(self):
         new_n, new_d, new_e = generate_keys()
@@ -186,13 +204,15 @@ class Ui_Window_Create(QtWidgets.QWidget):
         self.Create_Account_Button.setText(_translate("Window_Create", "Create Account"))
         self.Back_Button.setText(_translate("Window_Create", "Back"))
 if __name__ == '__main__':
-    import sys, socket
+    import sys, socket, time
+    from threading import *
     from client_functions import *
-    host = '192.168.0.183'
+    host = '192.168.0.6'
     port = 9100
     s = socket.socket()
     try:
         s.connect((host,port))
+        # s.settimeout(1.0)
         print('connected')
         n = process_string(s).split(';')[1]
         e,n = n.split(',')[1],n.split(',')[0]
@@ -215,4 +235,25 @@ if __name__ == '__main__':
     #Setting up first window shown
     widget.setCurrentWidget(page1)
     widget.show()
+    MIP = True
+    LIP = False
+    def Listener_Thread():
+        global LIP, MIP
+        while True:
+            time.sleep(1)
+            # print(f'thread running... {MIP}')
+            # s.setblocking(True)
+            if not MIP:
+                s.setblocking(False)
+                # print('listening in background...')
+                try:
+                    x = process_string(s)
+                except:
+                    continue
+                LIP = True
+                print(x)
+                # Code to display a popup window with the message x
+                LIP = False
+    thread = Thread(target=Listener_Thread)
+    thread.start()
     sys.exit(app.exec_())
