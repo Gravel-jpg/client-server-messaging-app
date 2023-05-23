@@ -56,7 +56,7 @@ def client_connection(client,address):
                     cursor.execute("INSERT INTO backlog ('outgoing_ciphertext','recipient') VALUES (?, ?)", (f'{ciphertext}',f'{recipient}'))
                     conn.commit()
                     send_string('send_cipher;True',client_id,cursor,client,True)
-                    send_string('test test, recieve me in screen 3',client_id,cursor,client,True)
+                    # send_string('test test, recieve me in screen 3',client_id,cursor,client,True)
                 else:
                     print(f'Error: There is no user with the username: {args[0]}')
                     send_string('key_request;False',client_id,cursor,client,True)
@@ -89,6 +89,7 @@ def client_connection(client,address):
                 for i in x:
                     print(f'Type:{type(i[0])},i:{i[0]}')
                     send_string(i[0],client_id,cursor,client,True)
+                cursor.execute(f"DELETE FROM backlog where recipient = '{client_id}'")
                 # for i in x:
                     # print(i)
                     # send_string(i,cursor,client_id,True)
