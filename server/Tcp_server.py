@@ -4,7 +4,7 @@ from time import sleep
 import sqlite3
 from server_functions import *
 
-Host = '192.168.0.6'
+Host = '192.168.0.'
 Port = 9100
 timeout = 5
 
@@ -19,6 +19,7 @@ def client_connection(client,address):
     db_name = os.path.join(here,'server_database.db')
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
+    cursor.execute("PRAGMA journal_mode = WAL")
     print('connection to database established')
     client_id = None
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
@@ -90,9 +91,6 @@ def client_connection(client,address):
                     print(f'Type:{type(i[0])},i:{i[0]}')
                     send_string(i[0],client_id,cursor,client,True)
                 cursor.execute(f"DELETE FROM backlog where recipient = '{client_id}'")
-                # for i in x:
-                    # print(i)
-                    # send_string(i,cursor,client_id,True)
             except:
                 print(f'no messages for client with client_id: {client_id}')
         except ConnectionResetError:
