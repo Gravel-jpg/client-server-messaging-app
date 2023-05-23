@@ -251,8 +251,19 @@ if __name__ == '__main__':
                 except:
                     continue
                 LIP = True
-                print(x)
+
+                # print(x)
+                with open(filename,'r') as f:
+                    data = json.load(f)
+                text = str(crypt(int(x),data['keys']['d'],data['keys']['n']))
+                text = [text[i:i+2] for i in range(0,len(text),2)]
+                translated = ''
+                for i in text:
+                    translated += data['int_to_str'][i]
+                print(f'Async translated: {translated}')
+
                 # Code to display a popup window with the message x
+                # also disable refresh keys and send button during
                 LIP = False
     thread = Thread(target=Listener_Thread)
     thread.start()
