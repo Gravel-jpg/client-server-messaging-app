@@ -18,6 +18,7 @@ s.listen()
 def client_connection(client,address):
     db_name = os.path.join(here,'server_database.db')
     conn = sqlite3.connect(db_name)
+    conn.execute('PRAGMA journal_mode = WAL')
     cursor = conn.cursor()
     cursor.execute("PRAGMA journal_mode = WAL")
     print('connection to database established')
