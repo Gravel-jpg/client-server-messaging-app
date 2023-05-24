@@ -4,7 +4,7 @@ from time import sleep
 import sqlite3
 from server_functions import *
 
-Host = '192.168.0.'
+Host = '192.168.0.172'
 Port = 9100
 timeout = 5
 
