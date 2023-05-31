@@ -99,8 +99,3 @@ def split_string(string):
         string = string[100:]
     strings[-1] = strings[-1][:-2]
     return strings
-
-def send_string_pieces(strings,client_uid,cursor,c):
-    for i in strings:
-        send_string(i,client_uid,cursor,c,True)
-# an example application would look like send_string_pieces(split_string(f'whatever function needs keys{n},{e}')client_uid,cursor,client)

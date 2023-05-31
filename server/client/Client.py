@@ -207,8 +207,8 @@ if __name__ == '__main__':
     import sys, socket, time
     from threading import *
     from client_functions import *
-    host = '192.168.0.6'
-    port = 9100
+    host = '10.104.43.29'
+    port = 10000
     s = socket.socket()
     try:
         s.connect((host,port))
@@ -247,20 +247,51 @@ if __name__ == '__main__':
                 s.setblocking(False)
                 # print('listening in background...')
                 try:
-                    x = process_string(s)
+                    x = process_string(s).split(',')
+                    print(f'x:{x}')
                 except:
                     continue
+                with open (filename, 'r') as f:
+                    data = json.load(f)
                 LIP = True
 
-                # print(x)
-                with open(filename,'r') as f:
-                    data = json.load(f)
-                text = str(crypt(int(x),data['keys']['d'],data['keys']['n']))
+                text = str(crypt(int(x[0]),data['keys']['d']),data['keys']['n'])
                 text = [text[i:i+2] for i in range(0,len(text),2)]
                 translated = ''
-                for i in text:
-                    translated += data['int_to_str'][i]
-                print(f'Async translated: {translated}')
+                for j in text:
+                    translated += data['int_to_str'][j]
+                if len(x) > 1:
+                    mended_message = translated[:-2]
+                    for k in range(len(x)-1):
+                        i = int(x[k+1])
+                        i = str(crypt(i,data['keys']['d'],data['keys']['n']))
+                        i = [i[j:j+2] for j in range(0,len(i),2)]
+                        Msg = ''
+                        for j in i:
+                            Msg += data['int_to_str'][j]
+                        if k == len(x)-2:
+                            mended_message += Msg
+                        else:
+                            mended_message += Msg[:-2]
+                    print(f'Async translated {len(x)} blocks: {mended_message}')
+
+
+                else:
+                    print(f'Async translated {len(x)} block: {translated}')
+
+                
+
+
+
+
+
+
+                # text = str(crypt(int(x),data['keys']['d'],data['keys']['n']))
+                # text = [text[i:i+2] for i in range(0,len(text),2)]
+                # translated = ''
+                # for i in text:
+                #     translated += data['int_to_str'][i]
+                # print(f'Async translated: {translated}')
 
                 # Code to display a popup window with the message x
                 # also disable refresh keys and send button during

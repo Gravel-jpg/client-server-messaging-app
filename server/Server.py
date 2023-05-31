@@ -3,16 +3,14 @@ import threading
 from time import sleep
 import sqlite3
 from server_functions import *
+
 # ///TODO/// 
-# verify that database is correctly deleting 
-# verify that database_lock solution works as intended.
-# update both json files to include e
 # encrypt all information in the database
-# 
-# 
-# 
-# 
-# 
+# put databases keys in Sjson.json
+# above or find a better solution, maybe a file type that cant be accessed remotely? (I heard that might be something I can do)
+# automatically pull this devices ip and host based on that.
+# invalid iteral for int with base - server side bug on client random disconnectionn
+# design ui for server?
 # 
 
 Host = '192.168.0.172'
