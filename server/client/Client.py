@@ -207,7 +207,7 @@ if __name__ == '__main__':
     import sys, socket, time
     from threading import *
     from client_functions import *
-    host = '10.104.43.29'
+    host = '192.168.0.172'
     port = 10000
     s = socket.socket()
     try:
@@ -255,7 +255,7 @@ if __name__ == '__main__':
                     data = json.load(f)
                 LIP = True
 
-                text = str(crypt(int(x[0]),data['keys']['d']),data['keys']['n'])
+                text = str(crypt(int(x[0]),data['keys']['d'],data['keys']['n']))
                 text = [text[i:i+2] for i in range(0,len(text),2)]
                 translated = ''
                 for j in text:
