@@ -99,3 +99,6 @@ def split_string(string):
         string = string[100:]
     strings[-1] = strings[-1][:-2]
     return strings
+
+class Empty_Backlog(Exception):
+    "Raised when the database returns nothing from the current client_id"

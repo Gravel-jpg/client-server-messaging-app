@@ -9,7 +9,7 @@ from server_functions import *
 # put databases keys in Sjson.json
 # above or find a better solution, maybe a file type that cant be accessed remotely? (I heard that might be something I can do)
 # automatically pull this devices ip and host based on that.
-# invalid iteral for int with base - server side bug on client random disconnectionn
+# invalid iteral for int with base - server side bug on client random disconnect and hogs server
 # design ui for server?
 # 
 
@@ -34,9 +34,9 @@ def client_connection(client,address):
     client_id = None
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
     send_string(f"server_keys;{x[0][3]}",None,cursor,client,False)
-    class Empty_Backlog(Exception):
-        "Raised when the database returns nothing from the current client_id"
-        pass
+    # class Empty_Backlog(Exception):
+    #     "Raised when the database returns nothing from the current client_id"
+    #     pass
     while True:
         try:
             print(f'The client_id is {client_id}')
@@ -127,8 +127,8 @@ def client_connection(client,address):
                 print(f'no messages for client with client_id: {client_id}')
             except Exception as ERROR:
                 print(f'unknown Exception : {ERROR}')
-        except ConnectionResetError:
-            print(f'connection with {address} Terminated')
+        except ConnectionResetError or ValueError:
+            print(f'connection with {address} Terminated\n due to either "ConnectionResetError" or "ValueError"')
             break
         except Exception as ERROR:
             print(f'unknown Exception : {ERROR}')
