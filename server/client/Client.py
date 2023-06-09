@@ -212,7 +212,6 @@ if __name__ == '__main__':
     s = socket.socket()
     try:
         s.connect((host,port))
-        # s.settimeout(1.0)
         print('connected')
         n = process_string(s).split(';')[1]
         e,n = n.split(',')[1],n.split(',')[0]
@@ -235,17 +234,16 @@ if __name__ == '__main__':
     #Setting up first window shown
     widget.setCurrentWidget(page1)
     widget.show()
+    # MIP = Message in progress
     MIP = True
+    # LIP = Listen in progress
     LIP = False
     def Listener_Thread():
         global LIP, MIP
         while True:
             time.sleep(1)
-            # print(f'thread running... {MIP}')
-            # s.setblocking(True)
             if not MIP:
                 s.setblocking(False)
-                # print('listening in background...')
                 try:
                     x = process_string(s).split(',')
                     print(f'x:{x}')
@@ -278,23 +276,6 @@ if __name__ == '__main__':
 
                 else:
                     print(f'Async translated {len(x)} block: {translated}')
-
-                
-
-
-
-
-
-
-                # text = str(crypt(int(x),data['keys']['d'],data['keys']['n']))
-                # text = [text[i:i+2] for i in range(0,len(text),2)]
-                # translated = ''
-                # for i in text:
-                #     translated += data['int_to_str'][i]
-                # print(f'Async translated: {translated}')
-
-                # Code to display a popup window with the message x
-                # also disable refresh keys and send button during
                 LIP = False
     thread = Thread(target=Listener_Thread)
     thread.start()

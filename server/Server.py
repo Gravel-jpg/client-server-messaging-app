@@ -5,38 +5,31 @@ import sqlite3
 from server_functions import *
 
 # ///TODO/// 
-# encrypt all information in the database
+# encrypt all information in the database (SEE)
 # put databases keys in Sjson.json
 # above or find a better solution, maybe a file type that cant be accessed remotely? (I heard that might be something I can do)
-# automatically pull this devices ip and host based on that.
-# invalid iteral for int with base - server side bug on client random disconnect and hogs server
 # design ui for server?
 # 
 
-Host = '192.168.0.172'
+
 Port = 9100
 timeout = 5
 database_lock = threading.Lock()
 s = socket.socket()
 # Links server to given port on ip, any traffic to that port is redirected to here
-s.bind((Host,Port))
-print(f'bound to :{Host}:{Port}')
+s.bind((socket.gethostbyname(socket.gethostname()),Port))
+print(f'bound to :{socket.gethostbyname(socket.gethostname())}:{Port}')
 
 # opens server to outside connections
 s.listen()
 def client_connection(client,address):
     db_name = os.path.join(here,'server_database.db')
     conn = sqlite3.connect(db_name)
-    # conn.execute('PRAGMA journal_mode = WAL')
     cursor = conn.cursor()
-    # cursor.execute("PRAGMA journal_mode = WAL")
     print('connection to database established')
     client_id = None
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
     send_string(f"server_keys;{x[0][3]}",None,cursor,client,False)
-    # class Empty_Backlog(Exception):
-    #     "Raised when the database returns nothing from the current client_id"
-    #     pass
     while True:
         try:
             print(f'The client_id is {client_id}')
