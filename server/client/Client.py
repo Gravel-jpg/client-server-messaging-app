@@ -1,10 +1,10 @@
 from PyQt5 import QtCore, QtWidgets
 class Ui_Window_Main(QtWidgets.QWidget):
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
     def Send_Message_Function(self):
+        '''sends a message to the server that is encrypted to another users keys.'''
         global MIP, LIP
         while LIP:
             time.sleep(1)
@@ -39,6 +39,7 @@ class Ui_Window_Main(QtWidgets.QWidget):
         # encrypt all pieces to recipient keys
         # send big message
     def Upload_Keys(self):
+        '''uploads a new set of keys to the server, for use if keys are compromised'''
         global MIP, LIP
         while LIP:
             time.sleep(1)
@@ -101,12 +102,15 @@ class Ui_Window_Login(QtWidgets.QWidget):
         super().__init__()
         self.setupUi(self)
     def Main_Window_Function(self):
+        '''executes upon succesful login, changes active window to the main window'''
         global MIP
         MIP = False
         widget.setCurrentWidget(page3)
     def Create_Prompt_Function(self):
+        '''changes the active window to the create window'''
         widget.setCurrentWidget(page2)
     def Login_Function(self):
+        '''attemps to login to server'''
         send_string(f'login_attempt;{self.Username_Field.text()},{self.Password_Field.text()}',s,n,e,True)
         if eval(process_string(s).split(';')[1]):
             print('Login True')
@@ -151,12 +155,15 @@ class Ui_Window_Create(QtWidgets.QWidget):
         super().__init__()
         self.setupUi(self)
     def Back_Function(self):
+        '''changes the active window to the the login window'''
         widget.setCurrentWidget(page1)
     def Main_Window_Function(self):
+        '''executes upon succesful account creation, changes active window to the main window'''
         global MIP
         MIP = False
         widget.setCurrentWidget(page3)
     def Upload_Account(self):
+        '''uploads a new account and new keys to the server'''
         new_n, new_d, new_e = generate_keys()
         with open(filename,'r') as f:
             data = json.load(f)
@@ -213,6 +220,7 @@ if __name__ == '__main__':
     try:
         s.connect((host,port))
         print('connected')
+        # recieves servers public keys upon initial connection
         n = process_string(s).split(';')[1]
         e,n = n.split(',')[1],n.split(',')[0]
         print(f'n:{n}\ne:{e}')
@@ -238,6 +246,8 @@ if __name__ == '__main__':
     MIP = True
     # LIP = Listen in progress
     LIP = False
+    # Listens every second to see if there is an incoming message
+    # Wont run if another message is in progress
     def Listener_Thread():
         global LIP, MIP
         while True:
@@ -246,7 +256,6 @@ if __name__ == '__main__':
                 s.setblocking(False)
                 try:
                     x = process_string(s).split(',')
-                    print(f'x:{x}')
                 except:
                     continue
                 with open (filename, 'r') as f:

@@ -23,11 +23,14 @@ print(f'bound to :{socket.gethostbyname(socket.gethostname())}:{Port}')
 # opens server to outside connections
 s.listen()
 def client_connection(client,address):
+    # connects main thread to the local database
+    # if you want an external database for a larger scale project, change sqlite into something more professional
     db_name = os.path.join(here,'server_database.db')
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     print('connection to database established')
     client_id = None
+    # Select the servers keys, this line will be phased out soon when i move the databases information into Sjson
     x = cursor.execute(f"SELECT * FROM main WHERE uid = '4'").fetchall()
     send_string(f"server_keys;{x[0][3]}",None,cursor,client,False)
     while True:
