@@ -9,7 +9,7 @@ from server_functions import *
 # put databases keys in Sjson.json
 # above or find a better solution, maybe a file type that cant be accessed remotely? (I heard that might be something I can do)
 # design ui for server?
-# 
+# "unkown exception: database is locked"
 
 
 Port = 9100
