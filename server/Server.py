@@ -10,6 +10,7 @@ from server_functions import *
 # above or find a better solution, maybe a file type that cant be accessed remotely? (I heard that might be something I can do)
 # design ui for server?
 # "unkown exception: database is locked"
+# implement popup_example to client.py
 
 
 Port = 9100
